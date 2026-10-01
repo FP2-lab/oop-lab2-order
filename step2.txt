@@ -1,0 +1,41 @@
+Этап 2. Проектирование класса. Вариант 8: Заказ интернет-магазина
+
+Элемент         | Описание
+----------------|--------------------------------------------------------
+Имя класса      | Order
+
+Поля (private)  | int orderId           - номер заказа
+                | double totalCost      - стоимость заказа
+                | int itemCount         - количество товаров
+                | OrderStatus status    - статус (enum: NEW, CONFIRMED, CANCELLED)
+                | static int objectCount - счётчик существующих объектов
+
+Конструкторы    | Order()                              - пустой заказ: номер 0, стоимость 0,
+                |                                        товаров 0, статус NEW
+                | Order(int id)                        - пустой заказ с заданным номером
+                | Order(int id, double cost, int cnt)  - заказ с начальным составом
+                |                                        (список инициализации + проверка)
+                | Order(const Order&)                  - копирование
+Деструктор      | ~Order() - выводит сообщение об уничтожении объекта,
+                |            уменьшает objectCount
+
+Методы чтения   | int getOrderId() const
+(const)         | double getTotalCost() const
+                | int getItemCount() const
+                | OrderStatus getStatus() const
+                | static int getObjectCount()
+                | void print() const
+
+Методы          | bool addItem(double price)  - добавить товар по цене price
+изменения       | bool removeItem(double price) - убрать товар по цене price
+                | bool confirm()              - подтвердить заказ
+                | bool cancel()               - отменить заказ
+                | (методы возвращают true/false: выполнена ли операция)
+
+Инварианты      | 1. itemCount >= 0
+                | 2. totalCost >= 0
+                | 3. Если itemCount == 0, то totalCost == 0
+                | 4. Подтверждённый заказ нельзя изменять (add, remove, cancel)
+                | 5. Отменённый заказ нельзя подтвердить (и изменять)
+                | 6. Пустой заказ (itemCount == 0) нельзя подтвердить
+                | 7. orderId >= 0
