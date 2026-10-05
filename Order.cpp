@@ -131,3 +131,39 @@ bool Order::removeItem(double price) {
     }
     return true;
 }
+// Подтверждение заказа. Возвращает true, если операция выполнена.
+bool Order::confirm() {
+    if (status == OrderStatus::CONFIRMED) {
+        std::cout << "Error: order #" << orderId
+                  << " is already confirmed" << std::endl;
+        return false;
+    }
+    if (status == OrderStatus::CANCELLED) {
+        std::cout << "Error: order #" << orderId
+                  << " is cancelled and cannot be confirmed" << std::endl;
+        return false;
+    }
+    if (itemCount == 0) {
+        std::cout << "Error: order #" << orderId
+                  << " is empty and cannot be confirmed" << std::endl;
+        return false;
+    }
+    status = OrderStatus::CONFIRMED;
+    return true;
+}
+
+// Отмена заказа. Возвращает true, если операция выполнена.
+bool Order::cancel() {
+    if (status == OrderStatus::CONFIRMED) {
+        std::cout << "Error: order #" << orderId
+                  << " is confirmed and cannot be cancelled" << std::endl;
+        return false;
+    }
+    if (status == OrderStatus::CANCELLED) {
+        std::cout << "Error: order #" << orderId
+                  << " is already cancelled" << std::endl;
+        return false;
+    }
+    status = OrderStatus::CANCELLED;
+    return true;
+}
