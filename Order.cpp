@@ -1,5 +1,6 @@
 #include "Order.h"
 #include <iostream>
+#include <iomanip>
 
 // Определение статического счётчика (в .cpp, один раз)
 int Order::objectCount = 0;
@@ -45,4 +46,46 @@ Order::~Order() {
 // Статический геттер счётчика
 int Order::getObjectCount() {
     return objectCount;
+}
+// Преобразование статуса в текст для вывода
+const char* Order::statusToString(OrderStatus s) {
+    switch (s) {
+        case OrderStatus::NEW:       return "NEW";
+        case OrderStatus::CONFIRMED: return "CONFIRMED";
+        case OrderStatus::CANCELLED: return "CANCELLED";
+    }
+    return "UNKNOWN";
+}
+
+// Методы чтения
+int Order::getOrderId() const {
+    return orderId;
+}
+
+double Order::getTotalCost() const {
+    return totalCost;
+}
+
+int Order::getItemCount() const {
+    return itemCount;
+}
+
+OrderStatus Order::getStatus() const {
+    return status;
+}
+
+// Вывод информации об объекте
+void Order::print() const {
+    std::ios_base::fmtflags oldFlags = std::cout.flags();
+    std::streamsize oldPrecision = std::cout.precision();
+
+    std::cout << "Order #" << orderId
+              << " | Items: " << itemCount
+              << " | Total: " << std::fixed << std::setprecision(2) << totalCost
+              << " | Status: " << statusToString(status)
+              << std::endl;
+
+    // Возвращаем настройки потока, чтобы не влиять на остальной вывод
+    std::cout.flags(oldFlags);
+    std::cout.precision(oldPrecision);
 }
