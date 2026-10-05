@@ -89,3 +89,45 @@ void Order::print() const {
     std::cout.flags(oldFlags);
     std::cout.precision(oldPrecision);
 }
+// Добавление товара в заказ. Возвращает true, если операция выполнена.
+bool Order::addItem(double price) {
+    if (status != OrderStatus::NEW) {
+        std::cout << "Error: order #" << orderId
+                  << " is " << statusToString(status)
+                  << ", cannot add item" << std::endl;
+        return false;
+    }
+    if (price <= 0) {
+        std::cout << "Error: item price must be positive" << std::endl;
+        return false;
+    }
+    ++itemCount;
+    totalCost += price;
+    return true;
+}
+
+// Удаление товара из заказа. Возвращает true, если операция выполнена.
+bool Order::removeItem(double price) {
+    if (status != OrderStatus::NEW) {
+        std::cout << "Error: order #" << orderId
+                  << " is " << statusToString(status)
+                  << ", cannot remove item" << std::endl;
+        return false;
+    }
+    if (itemCount == 0) {
+        std::cout << "Error: order #" << orderId
+                  << " has no items to remove" << std::endl;
+        return false;
+    }
+    if (price <= 0 || price > totalCost) {
+        std::cout << "Error: invalid price for removal" << std::endl;
+        return false;
+    }
+    --itemCount;
+    totalCost -= price;
+    // Инвариант: в пустом заказе стоимость равна нулю
+    if (itemCount == 0) {
+        totalCost = 0.0;
+    }
+    return true;
+}
